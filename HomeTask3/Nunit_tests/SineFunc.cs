@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using CSharpCalculator;
 
-[assembly: LevelOfParallelism(2)]
-namespace HomeTask3.Assertion
+
+namespace HomeTask3.Nunit_tests
 {
     [Parallelizable(ParallelScope.All)]
     [TestFixture]
-    public class NUnit
+    public class SineFunc
     {
+
+        public Calculator calculatorFunc;
+
         [OneTimeSetUp]
         public static void ClassInit()
         {
@@ -16,28 +23,29 @@ namespace HomeTask3.Assertion
         }
 
         [SetUp]
-        public static void TestInit()
+        public void TestInit()
         {
             Console.WriteLine("Preconditions for test");
+            calculatorFunc = new Calculator();
         }
 
-        [TestCase(4,8,12)]
-        [TestCase(5,10,15)]
-        [TestCase(10, 10, 20)]
-        public void NunitTest(double x, double y, double e)
-        { 
-             Calculator cal= new Calculator();
-             Assert.AreEqual(cal.Add(x, y), e);
+        [TestCase(90, 0.89399666360055785)]
+
+        public void SineTest(double x, double e)
+        {
+            double expected = e;
+            double actual = calculatorFunc.Sin(x);
+            Assert.AreEqual(actual, expected);
         }
 
-        [TestCase("1", "1", "2")]
-        public void NunitTest1(string x, string y, string e)
+        [TestCase("90", "0.89399666360055785")]
+        public void SineStringTest(string x, string e)
         {
             double xnew = Convert.ToDouble(x);
-            double ynew = Convert.ToDouble(y);
             double enew = Convert.ToDouble(e);
-            Calculator cal = new Calculator();
-            Assert.AreEqual(cal.Add(xnew, ynew), enew);
+            double actual = calculatorFunc.Sin(xnew);
+            double expected = enew;
+            Assert.AreEqual(actual, expected);
         }
 
         [TearDown]
@@ -52,4 +60,5 @@ namespace HomeTask3.Assertion
             Console.WriteLine("Post conditions for test class");
         }
     }
+
 }
